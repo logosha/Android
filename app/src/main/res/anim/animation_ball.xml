@@ -15,5 +15,4 @@
         android:duration="3000"
         android:pivotX="75%"
         android:pivotY="75%"/>
-    
 </set>
