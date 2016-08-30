@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">App</string>
+    <string name="user_id">user id</string>
+    <string name="name">Oleksii</string>
+    <string name="second_name">Logosha</string>
+    <string name="phone_number">+38 (050) 400-88-40</string>
+    <string name="email">logosha@gmail.com</string>
+    <string name="skills">
+    <b>Working skills:</b>\n
+    Java Core, OOP, Java Collections, Exceptions, Multithreading  etc\n
+    JDBC, Servlets, JSP, JSTL, XML, JSON\n
+    MySQL\n
+    Unit Testing (Junit)\n
+    Spring, Hibernate\n
+    Eclipse, IntelliJ IDEA\n
+    Maven, Git, Tomcat\n
+    Redmine, JIRA, SVN\n
+    <b>Additional software: </b>\n
+    Linux, Windows
+    </string>
+
+    <string name="experience">
+    <b>2008 – till now:</b>\n
+    Content manager, IceCat Netherlands-Ukraine (http://www.icecat.biz/)\n
+    - Products information search on European (United Kingdom, Spain, Germany, Italy, Benelux, Poland and others), American and Australian manufacturer sites.\n
+    - Place products specifications data into special forms (manually / using iMacros automated tool).\n
+    <b>2003 – 2015:</b>\n
+    Research Scientist in the Institute for Low Temperature Physics and Engineering of the National Academy of Sciences of Ukraine.
+    </string>
+
+    <string name="education">
+    <b>2015 – 2016:</b>\n
+    Oracle Academy - Java Fundamental/Programming/Enterprise (Kharkov).\n
+    <b>2003 – 2009:</b>\n
+    Ph.D student, researcher; scientific profession “Solid State Physics”. The thesis was defended in October 2009.\n
+    <b>1998 – 2003:</b>\n
+    Magister of Physics; Physics Faculty; V. N. Karazin Kharkiv National University; Kharkov, Ukraine.
+    </string>
+
+    <string-array name="names">
+        <item>Skills</item>
+        <item>Experience</item>
+        <item>Education</item>
+        <item>Hobbies</item>
+    </string-array>
+</resources>

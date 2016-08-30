@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#1b1c6b">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/settings"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings"
+            android:clickable="true" />
+
+        <ImageView
+            android:src="@drawable/default_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/default_photo"
+            android:clickable="true"
+            android:layout_toRightOf="@+id/settings"
+            android:layout_marginTop="63dp"
+            android:layout_marginLeft="50dp"/>
+
+        <ImageView
+            android:src="@drawable/log_out"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/log_out"
+            android:clickable="true"
+            android:layout_marginTop="100dp"/>
+
+        <TextView
+            android:id="@+id/user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_id"
+            android:textColor="#5082d8"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/default_photo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:clickable="true">
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/layout_bottom_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:background="#1b1c6b"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dip"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="false"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/default_photo"
+           >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:text="@string/name"
+                android:textColor="#5082d8"
+                android:layout_alignBottom="@+id/settings"
+                android:textSize="20dp"
+                android:clickable="true">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/second_name"
+                android:text="@string/second_name"
+                android:textColor="#5082d8"
+                android:layout_below="@+id/name"
+                android:layout_alignParentEnd="true"
+                android:clickable="true">
+
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/phone_number"
+                android:layout_below="@id/second_name"
+                android:text="@string/phone_number"
+                android:textColor="#FFFFFFFF"
+                android:clickable="true">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/email"
+                android:layout_below="@id/phone_number"
+                android:text="@string/email"
+                android:textColor="#FFFFFFFF"
+                android:clickable="true">
+            </TextView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ListView
+    android:id="@+id/lvMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:clickable="true"
+        android:divider="#ffffff"
+        android:dividerHeight="1dp"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
+        android:layout_below="@+id/user_id">
+    </ListView>
+
+
+
+
+</LinearLayout>
