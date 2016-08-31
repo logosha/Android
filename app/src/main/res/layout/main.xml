@@ -20,7 +20,7 @@
             android:clickable="true" />
 
         <ImageView
-            android:src="@drawable/default_photo"
+            android:src="@drawable/photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/default_photo"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/log_out"
             android:clickable="true"
-            android:layout_marginTop="100dp"/>
+            android:layout_below="@+id/default_photo"/>
 
         <TextView
             android:id="@+id/user_id"

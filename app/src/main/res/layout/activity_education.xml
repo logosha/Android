@@ -7,13 +7,16 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ActivityEducation">
+    tools:context=".ActivityEducation"
+    android:background="#1b1c6b">
 
-    <TextView
+    <WebView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/education"
-        android:id="@+id/textView"
-        android:textSize="25dp" />
+        android:text="@string/education_html_text"
+        android:id="@+id/webViewEducation"
+        android:textSize="25dp"
+        android:textColor="#FFFFFFFF"
+        android:background="#1b1c6b"/>
 
 </RelativeLayout>

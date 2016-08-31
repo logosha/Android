@@ -8,13 +8,13 @@
     <string name="skills">
     <b>Working skills:</b>\n
     Java Core, OOP, Java Collections, Exceptions, Multithreading  etc\n
+    Android SDK\n
     JDBC, Servlets, JSP, JSTL, XML, JSON\n
-    MySQL\n
+    SQLite, MySQL\n
     Unit Testing (Junit)\n
     Spring, Hibernate\n
-    Eclipse, IntelliJ IDEA\n
-    Maven, Git, Tomcat\n
-    Redmine, JIRA, SVN\n
+    Android Studio, Eclipse, IntelliJ IDEA\n
+    Git, SVN, Tomcat, Maven \n
     <b>Additional software: </b>\n
     Linux, Windows
     </string>
@@ -28,13 +28,19 @@
     Research Scientist in the Institute for Low Temperature Physics and Engineering of the National Academy of Sciences of Ukraine.
     </string>
 
-    <string name="education">
-    <b>2015 – 2016:</b>\n
-    Oracle Academy - Java Fundamental/Programming/Enterprise (Kharkov).\n
-    <b>2003 – 2009:</b>\n
-    Ph.D student, researcher; scientific profession “Solid State Physics”. The thesis was defended in October 2009.\n
-    <b>1998 – 2003:</b>\n
+    <string name="education_html_text">
+        <![CDATA[
+        <font size="5" color="white"
+        <h1>Education</h1>
+        <ol>
+        <li><b>2015 - 2016:</b>
+    Oracle Academy - Java Fundamental/Programming/Enterprise (Kharkov).</li>
+        <li><b>2003 - 2009:</b>
+    Ph.D student, researcher; scientific profession "Solid State Physics". The thesis was defended in October 2009.</li>
+        <li><b>1998 - 2003:</b>
     Magister of Physics; Physics Faculty; V. N. Karazin Kharkiv National University; Kharkov, Ukraine.
+        </ol></font>
+        ]]>
     </string>
 
     <string-array name="names">
