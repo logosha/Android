@@ -1,14 +1,11 @@
 package com.google.app;
 
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-public class ActivityEducation extends MyAbstractTollbarActivity {
+public class ActivityEducation extends MyAbstractToolbarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +21,5 @@ public class ActivityEducation extends MyAbstractTollbarActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return new AppCompatActivity().onOptionsItemSelected(item);
-        }
-    }
+
 }

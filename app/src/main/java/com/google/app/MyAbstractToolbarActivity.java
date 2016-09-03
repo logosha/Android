@@ -8,12 +8,11 @@ import android.view.MenuItem;
 /**
  * Created by Алексей on 01.09.2016.
  */
-public abstract class MyAbstractTollbarActivity extends AppCompatActivity{
+public abstract class MyAbstractToolbarActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -27,4 +26,5 @@ public abstract class MyAbstractTollbarActivity extends AppCompatActivity{
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

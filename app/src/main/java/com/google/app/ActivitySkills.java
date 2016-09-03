@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class ActivitySkills extends MyAbstractTollbarActivity  {
+public class ActivitySkills extends MyAbstractToolbarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -12,14 +12,5 @@ public class ActivitySkills extends MyAbstractTollbarActivity  {
         setContentView(R.layout.activity_skills);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return new AppCompatActivity().onOptionsItemSelected(item);
-        }
-    }
+
 }
