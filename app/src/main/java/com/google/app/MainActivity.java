@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 public class MainActivity extends Activity {
 
     ImageView settings;
@@ -31,14 +33,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-
-        Resources res = getResources();
-        String[] items = res.getStringArray(R.array.names);
-
+        String[] items = getResources().getStringArray(R.array.names);
         ListView lvMain = (ListView) findViewById(R.id.lvMain);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.my_list_item, items);
-        lvMain.setAdapter(adapter);
+        lvMain.setAdapter(new ArrayAdapter<String>(this, R.layout.my_list_item, items));
+
 
             lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -108,6 +106,9 @@ public class MainActivity extends Activity {
         secondName.setOnClickListener(ocl);
         phoneNumber.setOnClickListener(ocl);
         findViewById(R.id.email).setOnClickListener(ocl);
+
+
+
     }
 
 
