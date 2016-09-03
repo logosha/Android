@@ -7,11 +7,6 @@
     android:orientation="vertical"
     android:background="#1b1c6b">
 
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -72,8 +67,7 @@
             android:layout_alignParentRight="false"
             android:layout_marginTop="50dp"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/default_photo"
-           >
+            android:layout_toRightOf="@id/default_photo">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -137,8 +131,5 @@
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true">
     </ListView>
-
-
-
 
 </android.support.v4.widget.DrawerLayout>
