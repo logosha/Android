@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ActivitySkills" />
+        <activity android:name=".PhotoChangeActivity" />
         <activity android:name=".ActivityExperience" />
         <activity android:name=".ActivityEducation" />
         <activity android:name=".ActivityHobbies"></activity>

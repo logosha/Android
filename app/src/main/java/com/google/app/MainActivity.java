@@ -3,11 +3,17 @@ package com.google.app;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +23,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+
     ImageView settings;
     ImageView defaultPhoto;
     ImageView logOut;
@@ -25,6 +32,7 @@ public class MainActivity extends Activity {
     TextView secondName;
     TextView phoneNumber;
     boolean isEdit = false;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,11 +117,11 @@ public class MainActivity extends Activity {
                 ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
                 image.setImageResource(R.drawable.photo_icon);
                 dialog.show();
-                Button declineButton = (Button) dialog.findViewById(R.id.from_camera);
-                declineButton.setOnClickListener(new View.OnClickListener() {
+                btn1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        startActivity(new Intent(MainActivity.this, PhotoChangeActivity.class));
                     }
                 });
             }
@@ -126,6 +134,7 @@ public class MainActivity extends Activity {
         secondName.setOnClickListener(ocl);
         phoneNumber.setOnClickListener(ocl);
         findViewById(R.id.email).setOnClickListener(ocl);
+
 
 
     }
