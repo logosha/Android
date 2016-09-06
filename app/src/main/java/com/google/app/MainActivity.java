@@ -1,14 +1,13 @@
 package com.google.app;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,8 +25,6 @@ public class MainActivity extends Activity {
     TextView secondName;
     TextView phoneNumber;
     boolean isEdit = false;
-    final int DIALOG_EXIT = 1;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +71,7 @@ public class MainActivity extends Activity {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isEdit == false) {
+                if (!isEdit) {
                     Toast toast1 = Toast.makeText(MainActivity.this, "включен edit mode", Toast.LENGTH_SHORT);
                     toast1.show();
                     isEdit = true;
@@ -89,29 +86,38 @@ public class MainActivity extends Activity {
         View.OnClickListener ocl = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.default_photo) {
+                if (v.getId() == R.id.default_photo && isEdit) {
+                    showChooserDialog();
+                } else if (v.getId() == R.id.default_photo) {
                     Toast.makeText(MainActivity.this, "это картинка", Toast.LENGTH_LONG).show();
-                } else if (v.getId() == R.id.default_photo && isEdit == true) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("Photo content")
-                            .setMessage("Откуда взять фото")
-                            .setCancelable(false)
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Toast.makeText(getApplicationContext(), "Cancel", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                    AlertDialog ad = builder.create();
-                    ad.show();
-                } else if (v.getId() == R.id.log_out && isEdit == true) {
+                } else if (v.getId() == R.id.log_out && isEdit) {
                     Toast.makeText(MainActivity.this, "это иконка", Toast.LENGTH_LONG).show();
-                } else if (isEdit == true) {
+                } else if (isEdit) {
                     Toast.makeText(MainActivity.this, ((TextView) v).getText(), Toast.LENGTH_LONG).show();
                 }
             }
-        };
 
+            private void showChooserDialog(){
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.dialog);
+                dialog.setTitle("Photo changing");
+
+                Button btn1 = (Button) dialog.findViewById(R.id.from_galery);
+                btn1.setText(R.string.from_gallery);
+                Button btn2 = (Button) dialog.findViewById(R.id.from_camera);
+                btn2.setText(R.string.from_camera);
+                ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
+                image.setImageResource(R.drawable.photo_icon);
+                dialog.show();
+                Button declineButton = (Button) dialog.findViewById(R.id.from_camera);
+                declineButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        };
 
         defaultPhoto.setOnClickListener(ocl);
         logOut.setOnClickListener(ocl);
