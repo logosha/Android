@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/default_photo"
             android:clickable="true"
+            android:onClick="true"
             android:layout_toRightOf="@+id/settings"
             android:layout_marginTop="63dp"
             android:layout_marginLeft="50dp"/>
