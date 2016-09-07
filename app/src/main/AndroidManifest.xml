@@ -19,7 +19,7 @@
         <activity android:name=".PhotoChangeActivity" />
         <activity android:name=".ActivityExperience" />
         <activity android:name=".ActivityEducation" />
-        <activity android:name=".ActivityHobbies"></activity>
+        <activity android:name=".ActivityHobbies"/>
     </application>
 
 </manifest>
