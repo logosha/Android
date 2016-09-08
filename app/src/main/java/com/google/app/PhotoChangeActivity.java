@@ -21,8 +21,10 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity implements Lo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_change);
 
-        String[] from = new String[] {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
-        int[] to = new int[] {R.id.gvImage, R.id.tvText};
+        getSupportLoaderManager().initLoader(0, null, this);
+
+        String[] from = new String[] {MediaStore.Images.Media._ID};
+        int[] to = new int[] {R.id.tvText};
 
         gvData = (GridView) findViewById(R.id.gvPhoto);
         scAdapter = new SimpleCursorAdapter(this, R.layout.grid_item, null, from, to, 0);
