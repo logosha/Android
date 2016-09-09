@@ -33,7 +33,6 @@ public class MyCursorAdapter extends CursorAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.gvImage);
         String title = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media._ID));
         textView.setText(title);
-       // imageView.setImageResource(R.drawable.ball);
 
     }
 }
