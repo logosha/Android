@@ -2,62 +2,52 @@ package com.google.app;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 /**
  * Created by Алексей on 06.09.2016.
  */
-public class PhotoChangeActivity extends MyAbstractToolbarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class PhotoChangeActivity extends MyAbstractToolbarActivity {
 
-    GridView gvData;
-    SimpleCursorAdapter scAdapter;
+    MyCursorAdapter customAdapter;
+    private Cursor mCursor;
+    private GridView gridView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_change);
 
-        getSupportLoaderManager().initLoader(0, null, this);
+        gridView = (GridView) findViewById(R.id.gridView);
 
-        String[] from = new String[] {MediaStore.Images.Media._ID};
-        int[] to = new int[] {R.id.tvText};
+        String[] mProjection = new String[] {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
 
-        gvData = (GridView) findViewById(R.id.gvPhoto);
-        scAdapter = new SimpleCursorAdapter(this, R.layout.grid_item, null, from, to, 0);
-        gvData.setAdapter(scAdapter);
-        adjustGridView();
-    }
-
-    private void adjustGridView() {
-        gvData.setNumColumns(GridView.AUTO_FIT);
-        gvData.setColumnWidth(80);
-        gvData.setVerticalSpacing(5);
-        gvData.setHorizontalSpacing(5);
-        gvData.setStretchMode(GridView.STRETCH_SPACING_UNIFORM);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle bndl) {
-        return new CursorLoader(this,
+        mCursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.Media.DATA,
-                        MediaStore.Images.Media._ID},
+                mProjection,
                 null,
                 null,
                 MediaStore.Images.Media._ID + " DESC");
-    }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        scAdapter.swapCursor(cursor);
-    }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+        new Handler().post(new Runnable() {
+
+            @Override
+            public void run() {
+                customAdapter = new MyCursorAdapter(
+                        PhotoChangeActivity.this,
+                        mCursor,
+                        0);
+
+                gridView.setAdapter(customAdapter);
+            }
+
+        });
+
+
     }
 
 }
