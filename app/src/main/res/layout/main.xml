@@ -20,7 +20,7 @@
             android:clickable="true" />
 
         <ImageView
-            android:src="@drawable/photo"
+            android:src="@drawable/default_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/default_photo"
