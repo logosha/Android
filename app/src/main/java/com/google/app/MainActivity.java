@@ -2,6 +2,7 @@ package com.google.app;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,9 +20,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
 
 
     ImageView settings;
@@ -120,11 +124,14 @@ public class MainActivity extends Activity {
                 btn1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, PhotoChangeActivity.class);
                         dialog.dismiss();
-                        startActivity(new Intent(MainActivity.this, PhotoChangeActivity.class));
-                    }
+                        startActivityForResult(intent, 1);
+                   }
                 });
+
             }
+
         };
 
         defaultPhoto.setOnClickListener(ocl);
@@ -138,6 +145,18 @@ public class MainActivity extends Activity {
 
 
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (data == null) {
+            return;
+        } if (resultCode == RESULT_OK) {
+            String path = (String)data.getExtras().get("path");
+            Picasso.with(MainActivity.this)
+                    .load(new File(path))
+                    .resize(200, 200)
+                    .centerInside()
+                    .into(defaultPhoto);
+        }
+    }
 
 }

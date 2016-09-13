@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 /**
  * Created by Алексей on 06.09.2016.
  */
@@ -30,7 +32,7 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity {
 
         gridView = (GridView) findViewById(R.id.gridView);
 
-        String[] mProjection = new String[] {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
+        String[] mProjection = new String[]{MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
 
         mCursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -42,17 +44,13 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long i) {
-                Toast.makeText(PhotoChangeActivity.this, "" + view.getId(), Toast.LENGTH_SHORT).show();
-                ImageView newIV = (ImageView) findViewById(R.id.default_photo);
-              Cursor cursor = (Cursor)adapterView.getItemAtPosition(pos);
-              cursor.moveToPosition(pos);
-               String id = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media._ID));
-               Log.d(LOG_TAG, "itemClick: position = " + pos + ", id = " + id);
-                Picasso.with(PhotoChangeActivity.this)
-                        .load()
-                        .resize(200, 200)
-                        .centerInside()
-                        .into(newIV);
+
+                String path = (String)view.getTag(R.string.tag_image_path);
+                Intent intent = new Intent();
+                intent.putExtra("path", path);
+                setResult(RESULT_OK, intent);
+                finish();
+
 
             }
         });

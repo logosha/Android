@@ -31,37 +31,43 @@ public class MyCursorAdapter extends CursorAdapter {
         cursorInflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
     }
+
     public static final class ViewHolder {
         ImageView iv;
+        ProgressBar pb;
+
+        ViewHolder(View itemView) {
+            iv = (ImageView) itemView.findViewById(R.id.gvImage);
+            pb = (ProgressBar) itemView.findViewById(R.id.progressBar);
+        }
     }
 
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return cursorInflater.inflate(R.layout.grid_item_layout, parent, false);
-    }
+        final View view = cursorInflater.inflate(R.layout.grid_item_layout, parent, false);
+        view.setTag(new ViewHolder(view));
+        return view;
+   }
 
     public void bindView(View view, Context context, Cursor cursor) {
-        ProgressBar progressBar = null;
-            progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-
-
-        ViewHolder holder = new ViewHolder();
-        holder.iv = (ImageView) view.findViewById(R.id.gvImage);
+        final ViewHolder holder = (ViewHolder) view.getTag();
+        holder.pb.setVisibility(View.VISIBLE);
 
         int imagePathIdx = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         final String imagePath = cursor.getString(imagePathIdx);
+        view.setTag(R.string.tag_image_path, imagePath);
         Picasso.with(context)
                 .load(new File(imagePath))
                 .resize(200, 200)
                 .error(R.drawable.fail)
                 .centerCrop()
-                .into(holder.iv, new ImageLoadedCallback(progressBar) {
+                .into(holder.iv, new ImageLoadedCallback(holder.pb) {
                     @Override
                     public void onSuccess() {
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);
                         }
                     }
+
                     @Override
                     public void onError() {
                         progressBar.setVisibility(View.GONE);
@@ -70,10 +76,11 @@ public class MyCursorAdapter extends CursorAdapter {
                 });
 
     }
+
     private class ImageLoadedCallback implements Callback {
         ProgressBar progressBar;
 
-        public  ImageLoadedCallback(ProgressBar progBar){
+        public ImageLoadedCallback(ProgressBar progBar) {
             progressBar = progBar;
         }
 

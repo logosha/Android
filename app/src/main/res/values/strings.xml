@@ -7,6 +7,7 @@
     <string name="email">logosha@gmail.com</string>
     <string name="from_gallery">Load photo from gallery</string>
     <string name="from_camera">Shoot photo</string>
+    <string name="tag_image_path"/>
 
     <string name="skills">
     <b>Working skills:</b>\n
