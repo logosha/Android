@@ -2,19 +2,15 @@ package com.google.app;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,9 +21,10 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 
-public class MainActivity extends Activity{
+public class MainActivity extends Activity {
 
 
+    private static final String LOG = "MyLogs";
     ImageView settings;
     ImageView defaultPhoto;
     ImageView logOut;
@@ -36,6 +33,9 @@ public class MainActivity extends Activity{
     TextView secondName;
     TextView phoneNumber;
     boolean isEdit = false;
+    File directory;
+    final int REQUEST_CODE_CAMERA = 1;
+    final int REQUEST_CODE_GALLERY = 2;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class MainActivity extends Activity{
                 }
             }
 
-            private void showChooserDialog(){
+            private void showChooserDialog() {
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.setContentView(R.layout.dialog);
                 dialog.setTitle("Photo changing");
@@ -126,8 +126,17 @@ public class MainActivity extends Activity{
                     public void onClick(View v) {
                         Intent intent = new Intent(MainActivity.this, PhotoChangeActivity.class);
                         dialog.dismiss();
-                        startActivityForResult(intent, 1);
-                   }
+                        startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                    }
+                });
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        dialog.dismiss();
+                        // intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
+                        startActivityForResult(intent, REQUEST_CODE_CAMERA);
+                    }
                 });
 
             }
@@ -143,19 +152,30 @@ public class MainActivity extends Activity{
         findViewById(R.id.email).setOnClickListener(ocl);
 
 
-
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (data == null) {
-            return;
-        } if (resultCode == RESULT_OK) {
-            String path = (String)data.getExtras().get("path");
-            Picasso.with(MainActivity.this)
-                    .load(new File(path))
-                    .resize(200, 200)
-                    .centerInside()
-                    .into(defaultPhoto);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_GALLERY:
+                    if (data != null && data.hasExtra("path")) {
+                        String path = (String) data.getExtras().get("path");
+                        Picasso.with(MainActivity.this)
+                                .load(new File(path))
+                                .resize(200, 200)
+                                .centerInside()
+                                .into(defaultPhoto);
+                        break;
+                    }
+                case REQUEST_CODE_CAMERA:
+                    if (data != null && data.hasExtra("data")) {
+                        Bitmap thumbnailBitmap = (Bitmap) data.getExtras().get("data");
+                        defaultPhoto.setImageBitmap(thumbnailBitmap);
+                        break;
+                    }
+            }
         }
     }
 
