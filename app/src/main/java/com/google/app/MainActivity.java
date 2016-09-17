@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +23,6 @@ import java.io.File;
 public class MainActivity extends Activity {
 
 
-    private static final String LOG = "MyLogs";
     ImageView settings;
     ImageView defaultPhoto;
     ImageView logOut;
@@ -34,7 +31,6 @@ public class MainActivity extends Activity {
     TextView secondName;
     TextView phoneNumber;
     boolean isEdit = false;
-    File directory;
     final int REQUEST_CODE_CAMERA = 1;
     final int REQUEST_CODE_GALLERY = 2;
 
@@ -42,11 +38,27 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        findUI();
+        initMenu();
+        initListeners();
+    }
 
-        String[] items = getResources().getStringArray(R.array.names);
+
+
+    private void findUI() {
+        settings = (ImageView) findViewById(R.id.settings);
+        defaultPhoto = (ImageView) findViewById(R.id.default_photo);
+        logOut = (ImageView) findViewById(R.id.log_out);
+        userID = (TextView) findViewById(R.id.user_id);
+        name = (TextView) findViewById(R.id.name);
+        secondName = (TextView) findViewById(R.id.second_name);
+        phoneNumber = (TextView) findViewById(R.id.phone_number);
+    }
+
+    public void initMenu() {
         ListView lvMain = (ListView) findViewById(R.id.lvMain);
+        String[] items = getResources().getStringArray(R.array.names);
         lvMain.setAdapter(new ArrayAdapter<String>(this, R.layout.my_list_item, items));
-
 
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -70,36 +82,21 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }
 
-
-        settings = (ImageView) findViewById(R.id.settings);
-        defaultPhoto = (ImageView) findViewById(R.id.default_photo);
-        logOut = (ImageView) findViewById(R.id.log_out);
-        userID = (TextView) findViewById(R.id.user_id);
-        name = (TextView) findViewById(R.id.name);
-        secondName = (TextView) findViewById(R.id.second_name);
-        phoneNumber = (TextView) findViewById(R.id.phone_number);
-
-
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isEdit) {
-                    Toast toast1 = Toast.makeText(MainActivity.this, "включен edit mode", Toast.LENGTH_SHORT);
-                    toast1.show();
-                    isEdit = true;
-                } else {
-                    Toast toast2 = Toast.makeText(MainActivity.this, "выключен edit mode", Toast.LENGTH_SHORT);
-                    toast2.show();
-                    isEdit = false;
-                }
-            }
-        });
-
+    private void initListeners() {
         View.OnClickListener ocl = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.default_photo && isEdit) {
+                if (v.getId() == R.id.settings && !isEdit) {
+                    Toast toast1 = Toast.makeText(MainActivity.this, "включен edit mode", Toast.LENGTH_SHORT);
+                    toast1.show();
+                    isEdit = true;
+                } else if (v.getId() == R.id.settings && isEdit) {
+                    Toast toast2 = Toast.makeText(MainActivity.this, "выключен edit mode", Toast.LENGTH_SHORT);
+                    toast2.show();
+                    isEdit = false;
+                } else if (v.getId() == R.id.default_photo && isEdit) {
                     showChooserDialog();
                 } else if (v.getId() == R.id.default_photo) {
                     Toast.makeText(MainActivity.this, "это картинка", Toast.LENGTH_LONG).show();
@@ -109,39 +106,6 @@ public class MainActivity extends Activity {
                     Toast.makeText(MainActivity.this, ((TextView) v).getText(), Toast.LENGTH_LONG).show();
                 }
             }
-
-            private void showChooserDialog() {
-                final Dialog dialog = new Dialog(MainActivity.this);
-                dialog.setContentView(R.layout.dialog);
-                dialog.setTitle("Photo changing");
-
-                Button btn1 = (Button) dialog.findViewById(R.id.from_galery);
-                btn1.setText(R.string.from_gallery);
-                Button btn2 = (Button) dialog.findViewById(R.id.from_camera);
-                btn2.setText(R.string.from_camera);
-                ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
-                image.setImageResource(R.drawable.photo_icon);
-                dialog.show();
-                btn1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, PhotoChangeActivity.class);
-                        dialog.dismiss();
-                        startActivityForResult(intent, REQUEST_CODE_GALLERY);
-                    }
-                });
-                btn2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        dialog.dismiss();
-                        // intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
-                        startActivityForResult(intent, REQUEST_CODE_CAMERA);
-                    }
-                });
-
-            }
-
         };
 
         defaultPhoto.setOnClickListener(ocl);
@@ -151,7 +115,38 @@ public class MainActivity extends Activity {
         secondName.setOnClickListener(ocl);
         phoneNumber.setOnClickListener(ocl);
         findViewById(R.id.email).setOnClickListener(ocl);
+        settings.setOnClickListener(ocl);
 
+    }
+
+    private void showChooserDialog() {
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setTitle("Photo changing");
+
+        Button btn1 = (Button) dialog.findViewById(R.id.from_galery);
+        btn1.setText(R.string.from_gallery);
+        Button btn2 = (Button) dialog.findViewById(R.id.from_camera);
+        btn2.setText(R.string.from_camera);
+        ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
+        image.setImageResource(R.drawable.photo_icon);
+        dialog.show();
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PhotoChangeActivity.class);
+                dialog.dismiss();
+                startActivityForResult(intent, REQUEST_CODE_GALLERY);
+            }
+        });
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                dialog.dismiss();
+                startActivityForResult(intent, REQUEST_CODE_CAMERA);
+            }
+        });
 
     }
 
