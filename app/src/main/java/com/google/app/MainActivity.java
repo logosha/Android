@@ -22,7 +22,6 @@ import java.io.File;
 
 public class MainActivity extends Activity {
 
-
     ImageView settings;
     ImageView defaultPhoto;
     ImageView logOut;
@@ -34,7 +33,6 @@ public class MainActivity extends Activity {
     final int REQUEST_CODE_CAMERA = 1;
     final int REQUEST_CODE_GALLERY = 2;
 
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -42,8 +40,6 @@ public class MainActivity extends Activity {
         initMenu();
         initListeners();
     }
-
-
 
     private void findUI() {
         settings = (ImageView) findViewById(R.id.settings);

@@ -24,14 +24,12 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity {
     MyCursorAdapter customAdapter;
     private Cursor mCursor;
     private GridView gridView;
-    final String LOG_TAG = "myLogs";
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_change);
 
         gridView = (GridView) findViewById(R.id.gridView);
-
         String[] mProjection = new String[]{MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
 
         mCursor = getContentResolver().query(
@@ -50,27 +48,19 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity {
                 intent.putExtra("path", path);
                 setResult(RESULT_OK, intent);
                 finish();
-
-
             }
         });
 
-
         new Handler().post(new Runnable() {
-
             @Override
             public void run() {
                 customAdapter = new MyCursorAdapter(
                         PhotoChangeActivity.this,
                         mCursor,
                         0);
-
                 gridView.setAdapter(customAdapter);
             }
 
         });
-
-
     }
-
 }

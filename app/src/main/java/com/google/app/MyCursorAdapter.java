@@ -2,18 +2,13 @@ package com.google.app;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -60,20 +55,7 @@ public class MyCursorAdapter extends CursorAdapter {
                 .resize(200, 200)
                 .error(R.drawable.fail)
                 .centerCrop()
-                .into(holder.iv, new ImageLoadedCallback(holder.pb) {
-                    @Override
-                    public void onSuccess() {
-                        if (progressBar != null) {
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onError() {
-                        progressBar.setVisibility(View.GONE);
-
-                    }
-                });
+                .into(holder.iv, new ImageLoadedCallback(holder.pb));
 
     }
 
@@ -83,15 +65,17 @@ public class MyCursorAdapter extends CursorAdapter {
         public ImageLoadedCallback(ProgressBar progBar) {
             progressBar = progBar;
         }
-
         @Override
         public void onSuccess() {
-
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onError() {
-
+            progressBar.setVisibility(View.GONE);
         }
+
     }
 }
