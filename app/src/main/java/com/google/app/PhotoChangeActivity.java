@@ -3,41 +3,29 @@ package com.google.app;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
-
-import java.io.File;
-
 /**
  * Created by Алексей on 06.09.2016.
  */
-public class PhotoChangeActivity extends MyAbstractToolbarActivity {
+public class PhotoChangeActivity extends MyAbstractToolbarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int LOADER_ID = 0;
     MyCursorAdapter customAdapter;
     private Cursor mCursor;
     private GridView gridView;
+    String[] mProjection = new String[]{MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_change);
-
         gridView = (GridView) findViewById(R.id.gridView);
-        String[] mProjection = new String[]{MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
-
-        mCursor = getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                mProjection,
-                null,
-                null,
-                MediaStore.Images.Media._ID + " DESC");
+        getLoaderManager().initLoader(LOADER_ID, null, this);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -50,17 +38,35 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity {
                 finish();
             }
         });
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                customAdapter = new MyCursorAdapter(
-                        PhotoChangeActivity.this,
-                        mCursor,
-                        0);
-                gridView.setAdapter(customAdapter);
-            }
-
-        });
     }
+
+    @Override
+    public Loader <Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this,MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        mProjection,
+        null,
+        null,
+        MediaStore.Images.Media._ID + " DESC");
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (customAdapter==null) {
+            customAdapter = new MyCursorAdapter(
+                    PhotoChangeActivity.this,
+                    mCursor,
+                    0);
+            gridView.setAdapter(customAdapter);
+        } else {
+            customAdapter.swapCursor(cursor);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+
 }
