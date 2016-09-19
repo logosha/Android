@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     ImageView settings;
     ImageView defaultPhoto;
@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
         initListeners();
     }
 
-    private void findUI() {
+       private void findUI() {
         settings = (ImageView) findViewById(R.id.settings);
         defaultPhoto = (ImageView) findViewById(R.id.default_photo);
         logOut = (ImageView) findViewById(R.id.log_out);
@@ -81,38 +81,14 @@ public class MainActivity extends Activity {
     }
 
     private void initListeners() {
-        View.OnClickListener ocl = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getId() == R.id.settings && !isEdit) {
-                    Toast toast1 = Toast.makeText(MainActivity.this, "включен edit mode", Toast.LENGTH_SHORT);
-                    toast1.show();
-                    isEdit = true;
-                } else if (v.getId() == R.id.settings && isEdit) {
-                    Toast toast2 = Toast.makeText(MainActivity.this, "выключен edit mode", Toast.LENGTH_SHORT);
-                    toast2.show();
-                    isEdit = false;
-                } else if (v.getId() == R.id.default_photo && isEdit) {
-                    showChooserDialog();
-                } else if (v.getId() == R.id.default_photo) {
-                    Toast.makeText(MainActivity.this, "это картинка", Toast.LENGTH_LONG).show();
-                } else if (v.getId() == R.id.log_out && isEdit) {
-                    Toast.makeText(MainActivity.this, "это иконка", Toast.LENGTH_LONG).show();
-                } else if (isEdit) {
-                    Toast.makeText(MainActivity.this, ((TextView) v).getText(), Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-
-        defaultPhoto.setOnClickListener(ocl);
-        logOut.setOnClickListener(ocl);
-        userID.setOnClickListener(ocl);
-        name.setOnClickListener(ocl);
-        secondName.setOnClickListener(ocl);
-        phoneNumber.setOnClickListener(ocl);
-        findViewById(R.id.email).setOnClickListener(ocl);
-        settings.setOnClickListener(ocl);
-
+        defaultPhoto.setOnClickListener(this);
+        logOut.setOnClickListener(this);
+        userID.setOnClickListener(this);
+        name.setOnClickListener(this);
+        secondName.setOnClickListener(this);
+        phoneNumber.setOnClickListener(this);
+        findViewById(R.id.email).setOnClickListener(this);
+        settings.setOnClickListener(this);
     }
 
     private void showChooserDialog() {
@@ -171,4 +147,24 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.settings && !isEdit) {
+            Toast toast1 = Toast.makeText(MainActivity.this, "включен edit mode", Toast.LENGTH_SHORT);
+            toast1.show();
+            isEdit = true;
+        } else if (v.getId() == R.id.settings && isEdit) {
+            Toast toast2 = Toast.makeText(MainActivity.this, "выключен edit mode", Toast.LENGTH_SHORT);
+            toast2.show();
+            isEdit = false;
+        } else if (v.getId() == R.id.default_photo && isEdit) {
+            showChooserDialog();
+        } else if (v.getId() == R.id.default_photo) {
+            Toast.makeText(MainActivity.this, "это картинка", Toast.LENGTH_LONG).show();
+        } else if (v.getId() == R.id.log_out && isEdit) {
+            Toast.makeText(MainActivity.this, "это иконка", Toast.LENGTH_LONG).show();
+        } else if (isEdit) {
+            Toast.makeText(MainActivity.this, ((TextView) v).getText(), Toast.LENGTH_LONG).show();
+        }
+    }
 }

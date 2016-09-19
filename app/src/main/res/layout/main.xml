@@ -123,7 +123,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_gravity="right"
+        android:layout_gravity="left"
         android:background="#1b1c6b"
         android:choiceMode="singleChoice"
         android:clickable="true"
