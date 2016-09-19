@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -17,7 +17,6 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity implements Lo
 
     private static final int LOADER_ID = 0;
     MyCursorAdapter customAdapter;
-    private Cursor mCursor;
     private GridView gridView;
     String[] mProjection = new String[]{MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
 
@@ -55,7 +54,7 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity implements Lo
         if (customAdapter==null) {
             customAdapter = new MyCursorAdapter(
                     PhotoChangeActivity.this,
-                    mCursor,
+                    cursor,
                     0);
             gridView.setAdapter(customAdapter);
         } else {
