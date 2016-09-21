@@ -22,7 +22,7 @@ public class PhotoChangeActivity extends MyAbstractToolbarActivity implements Lo
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo_change);
+        setContentView(R.layout.act_photo_change);
         gridView = (GridView) findViewById(R.id.gridView);
         getLoaderManager().initLoader(LOADER_ID, null, this);
 

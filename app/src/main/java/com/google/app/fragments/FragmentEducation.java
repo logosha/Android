@@ -1,30 +1,25 @@
-package com.google.app;
+package com.google.app.fragments;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebView;
+import android.view.ViewGroup;
 import android.widget.Button;
+import com.google.app.R;
 
-public class ActivityEducation extends MyAbstractToolbarActivity{
-
+public class FragmentEducation extends Fragment {
     Button btn1;
     Button btn2;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_education);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fr_education, container, false);
 
-
-        WebView webview = (WebView) findViewById(R.id.viewEducation);
-        webview.getSettings();
-        webview.setBackgroundColor(getResources().getColor(R.color.colorWeb));
-        String htmlAsString = getString(R.string.education_text);
-        webview.loadData(htmlAsString, "text/html", "UTF-8");
-
-        btn1 = (Button) findViewById(R.id.btnUniverSite);
+        btn1 = (Button) v.findViewById(R.id.btnUniverSite);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -32,7 +27,7 @@ public class ActivityEducation extends MyAbstractToolbarActivity{
                 startActivity(intent);
             }
         });
-        btn2 = (Button) findViewById(R.id.btnUniverLocation);
+        btn2 = (Button) v.findViewById(R.id.btnUniverLocation);
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,9 +37,7 @@ public class ActivityEducation extends MyAbstractToolbarActivity{
                 startActivity(intent);
             }
         });
-
+        return v;
     }
-
-
 
 }

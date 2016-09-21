@@ -1,11 +1,21 @@
 package com.google.app;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,12 +25,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.app.fragments.FragmentEducation;
+import com.google.app.fragments.FragmentExperience;
+import com.google.app.fragments.FragmentHobbies;
+import com.google.app.fragments.FragmentSkills;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     ImageView settings;
     ImageView defaultPhoto;
@@ -33,15 +48,46 @@ public class MainActivity extends Activity implements View.OnClickListener {
     final int REQUEST_CODE_CAMERA = 1;
     final int REQUEST_CODE_GALLERY = 2;
 
-    public void onCreate(Bundle savedInstanceState) {
+    FragmentEducation fragmentEducation;
+    FragmentExperience fragmentExperience;
+    FragmentHobbies fragmentHobbies;
+    FragmentSkills fragmentSkills;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        fragmentEducation = new FragmentEducation();
+        fragmentExperience = new FragmentExperience();
+        fragmentHobbies = new FragmentHobbies();
+        fragmentSkills = new FragmentSkills();
+
         findUI();
-        initMenu();
         initListeners();
     }
 
-       private void findUI() {
+    private void findUI() {
         settings = (ImageView) findViewById(R.id.settings);
         defaultPhoto = (ImageView) findViewById(R.id.default_photo);
         logOut = (ImageView) findViewById(R.id.log_out);
@@ -51,34 +97,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         phoneNumber = (TextView) findViewById(R.id.phone_number);
     }
 
-    public void initMenu() {
-        ListView lvMain = (ListView) findViewById(R.id.lvMain);
-        String[] items = getResources().getStringArray(R.array.names);
-        lvMain.setAdapter(new ArrayAdapter<String>(this, R.layout.my_list_item, items));
-
-        lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                                    long id) {
-                TextView textView = (TextView) itemClicked;
-                String strText = textView.getText().toString();
-                String[] names = getResources().getStringArray(R.array.names);
-
-                if (strText.equalsIgnoreCase(names[0])) {
-                    startActivity(new Intent(MainActivity.this, ActivitySkills.class));
-                }
-                if (strText.equalsIgnoreCase(names[1])) {
-                    startActivity(new Intent(MainActivity.this, ActivityExperience.class));
-                }
-                if (strText.equalsIgnoreCase(names[2])) {
-                    startActivity(new Intent(MainActivity.this, ActivityEducation.class));
-                }
-                if (strText.equalsIgnoreCase(names[3])) {
-                    startActivity(new Intent(MainActivity.this, ActivityHobbies.class));
-                }
-            }
-        });
-    }
 
     private void initListeners() {
         defaultPhoto.setOnClickListener(this);
@@ -165,6 +183,76 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Toast.makeText(MainActivity.this, "это иконка", Toast.LENGTH_LONG).show();
         } else if (isEdit) {
             Toast.makeText(MainActivity.this, ((TextView) v).getText(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        if (id == R.id.nav_education) {
+            String tag = "edu";
+                    fragmentTransaction
+                    .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
+                    .replace(R.id.container, fragmentEducation, tag)
+                    .addToBackStack(tag);
+
+        } else if (id == R.id.nav_experience) {
+            String tag = "exp";
+            fragmentTransaction
+                    .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
+                    .replace(R.id.container, fragmentExperience, tag)
+                    .addToBackStack(tag);
+
+        } else if (id == R.id.nav_skills) {
+            String tag = "skl";
+            fragmentTransaction
+                    .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
+                    .replace(R.id.container, fragmentSkills, tag)
+                    .addToBackStack(tag);
+
+        } else if (id == R.id.nav_hobbies) {
+            String tag = "hob";
+            fragmentTransaction
+                    .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
+                    .replace(R.id.container, fragmentHobbies, tag)
+                    .addToBackStack(tag);
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        } fragmentTransaction.commit();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 }
