@@ -1,15 +1,10 @@
-<android.support.v4.widget.DrawerLayout
-
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="#1b1c6b">
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
         <ImageView
             android:src="@drawable/settings"
@@ -117,22 +112,3 @@
 
     </RelativeLayout>
 
-    <ListView
-    android:id="@+id/lvMain"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="left"
-        android:background="#1b1c6b"
-        android:choiceMode="singleChoice"
-        android:clickable="true"
-        android:divider="#ffffff"
-        android:dividerHeight="0dp"
-        android:footerDividersEnabled="true"
-        android:headerDividersEnabled="true">
-    </ListView>
-
-
-
-</android.support.v4.widget.DrawerLayout>
