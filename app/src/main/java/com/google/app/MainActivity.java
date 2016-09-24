@@ -2,6 +2,9 @@ package com.google.app;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -17,14 +20,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 
+import com.google.app.fragments.FragmentAbout;
 import com.google.app.fragments.FragmentEducation;
 import com.google.app.fragments.FragmentExperience;
 import com.google.app.fragments.FragmentHobbies;
 import com.google.app.fragments.FragmentMain;
 import com.google.app.fragments.FragmentSkills;
-import com.squareup.picasso.Picasso;
-
-import java.io.File;
 
 
 public class MainActivity extends AppCompatActivity
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity
     final String EXP = "exp";
     final String SKL = "skl";
     final String HOB = "hob";
+    final String ABT = "abt";
+
 
 
 
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     FragmentHobbies fragmentHobbies;
     FragmentSkills fragmentSkills;
     FragmentMain fragmentMain;
+    FragmentAbout fragmentAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,7 @@ public class MainActivity extends AppCompatActivity
         fragmentHobbies = new FragmentHobbies();
         fragmentSkills = new FragmentSkills();
         fragmentMain = new FragmentMain();
+        fragmentAbout = new FragmentAbout();
 
         String tag = "main";
         getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
@@ -119,7 +124,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_hobbies) {
             fragmentToShow = fragmentHobbies;
             tag = HOB;
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.about) {
+            fragmentToShow = fragmentAbout;
+            tag = ABT;
 
         } else if (id == R.id.nav_send) {
 
@@ -144,5 +151,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
+
 
 }
