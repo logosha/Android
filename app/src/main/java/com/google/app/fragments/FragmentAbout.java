@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.app.R;
@@ -23,7 +25,10 @@ import com.thin.downloadmanager.ThinDownloadManager;
 public class FragmentAbout extends Fragment {
     Button btnCheck;
     Button btnDownload;
-    ThinDownloadManager downloadManager;
+    ProgressBar downloadProgress;
+    TextView tvProgress;
+    private ThinDownloadManager downloadManager;
+    private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
     Uri downloadUri = Uri.parse("https://github.com/logosha/android/archive/master.zip");
     Uri destinationUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip");
 
@@ -34,6 +39,12 @@ public class FragmentAbout extends Fragment {
 
         btnCheck = (Button) v.findViewById(R.id.btnCheck);
         btnDownload = (Button) v.findViewById(R.id.btnDownload);
+        tvProgress = (TextView) v.findViewById(R.id.downloadStatus);
+        downloadProgress = (ProgressBar) v.findViewById(R.id.progress_bar);
+        downloadProgress.setMax(100);
+        downloadProgress.setProgress(0);
+        tvProgress.setText("Press \"PROJECT DOWNLOAD\" for download project to SD");
+
 
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +67,7 @@ public class FragmentAbout extends Fragment {
 }
 
     private void downloadProject() {
-        downloadManager = new ThinDownloadManager();
+        downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
                 DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
                 .addCustomHeader("Auth-Token", "YourTokenApiKey")
                 .setRetryPolicy(new DefaultRetryPolicy())
@@ -65,21 +76,25 @@ public class FragmentAbout extends Fragment {
                 .setDownloadListener(new DownloadStatusListener() {
                                         @Override
                                         public void onDownloadComplete(int id) {
-                                            Toast.makeText(getActivity(), "Загрузка завершена", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getActivity(), "Loading is complete", Toast.LENGTH_LONG).show();
+                                            tvProgress.setText("Loading is complete");
                                         }
 
                                         @Override
                                         public void onDownloadFailed(int id, int errorCode, String errorMessage) {
-
+                                            downloadProgress.setProgress(0);
                                         }
 
                                         @Override
-                                        public void onProgress(int id, long totalBytes, long downloadedBytes, int progress) {
-
-                                        }
+                                      public void onProgress(int id, long totalBytes, long downloadedBytes, int progress) {
+                                            downloadProgress.setProgress(progress);
+                                       }
                                     });
         downloadManager.add(downloadRequest);
+        downloadManager.release();
+
     }
+
 
 
     public boolean isOnline() {

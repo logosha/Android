@@ -4,23 +4,41 @@
     android:layout_height="match_parent"
     tools:context=".fragments.FragmentAbout">
 <LinearLayout
+
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/btnLayout"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal">
 
     <Button
         android:id="@+id/btnCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Check Internet"
-        android:onClick="check"/>
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:id="@+id/btnDownload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Project download"
-        android:onClick="download"/>
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/downloadStatus"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnLayout"/>
 
 </LinearLayout>
+
+
 
 </FrameLayout>
