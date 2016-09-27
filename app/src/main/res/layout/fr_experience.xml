@@ -9,8 +9,9 @@
         android:layout_height="wrap_content"
         android:text="@string/experience_text"
         android:id="@+id/viewExperience"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textColor="#000000"
+        android:scrollbars="vertical"
         android:background="#FFFFFF"/>
 
 </RelativeLayout>

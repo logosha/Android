@@ -87,14 +87,13 @@ public class FragmentMain extends Fragment implements View.OnClickListener{
     private void showChooserDialog() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog);
-        dialog.setTitle("Photo changing");
+        dialog.setTitle("Please change photo");
 
         Button btn1 = (Button) dialog.findViewById(R.id.from_galery);
         btn1.setText(R.string.from_gallery);
         Button btn2 = (Button) dialog.findViewById(R.id.from_camera);
         btn2.setText(R.string.from_camera);
         ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
-        image.setImageResource(R.drawable.photo_icon);
         dialog.show();
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +22,14 @@ import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
 import com.thin.downloadmanager.ThinDownloadManager;
 
-
 public class FragmentAbout extends Fragment {
     Button btnCheck;
     Button btnDownload;
     ProgressBar downloadProgress;
     TextView tvProgress;
-    private ThinDownloadManager downloadManager;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
+
+
     Uri downloadUri = Uri.parse("https://github.com/logosha/android/archive/master.zip");
     Uri destinationUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip");
 
@@ -67,7 +68,7 @@ public class FragmentAbout extends Fragment {
 }
 
     private void downloadProject() {
-        downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
+        ThinDownloadManager downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
                 DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
                 .addCustomHeader("Auth-Token", "YourTokenApiKey")
                 .setRetryPolicy(new DefaultRetryPolicy())
@@ -76,7 +77,6 @@ public class FragmentAbout extends Fragment {
                 .setDownloadListener(new DownloadStatusListener() {
                                         @Override
                                         public void onDownloadComplete(int id) {
-                                            Toast.makeText(getActivity(), "Loading is complete", Toast.LENGTH_LONG).show();
                                             tvProgress.setText("Loading is complete");
                                         }
 
@@ -86,12 +86,11 @@ public class FragmentAbout extends Fragment {
                                         }
 
                                         @Override
-                                      public void onProgress(int id, long totalBytes, long downloadedBytes, int progress) {
+                                        public void onProgress(int id, long totalBytes, long downloadedBytes, int progress) {
                                             downloadProgress.setProgress(progress);
                                        }
                                     });
         downloadManager.add(downloadRequest);
-        downloadManager.release();
 
     }
 
