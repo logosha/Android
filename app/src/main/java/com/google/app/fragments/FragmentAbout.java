@@ -27,10 +27,12 @@ import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
 import com.thin.downloadmanager.ThinDownloadManager;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +53,7 @@ public class FragmentAbout extends Fragment {
 
     Uri downloadUri = Uri.parse("https://github.com/logosha/android/archive/master.zip");
     Uri destinationUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip");
+    TextView tvFileContent;
 
 
     @Override
@@ -63,6 +66,8 @@ public class FragmentAbout extends Fragment {
         tvProgress = (TextView) v.findViewById(R.id.downloadStatus);
         downloadProgress = (ProgressBar) v.findViewById(R.id.progress_bar);
         lvFiles = (ListView)v.findViewById(R.id.listView1);
+        tvFileContent = (TextView) v.findViewById(R.id.fileContent);
+
         downloadProgress.setMax(100);
         downloadProgress.setProgress(0);
         tvProgress.setText("Press \"PROJECT DOWNLOAD\" for download");
@@ -125,7 +130,7 @@ public class FragmentAbout extends Fragment {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void unZip(final String zipFileName){
-        ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> myArrList = new ArrayList<>();
         HashMap<String, String> map;
         byte[] buffer = new byte[BUFFER_SIZE];
         final String dstDirectory = destinationDirectory(zipFileName);
@@ -173,16 +178,30 @@ public class FragmentAbout extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                         long id) {
-                //    TextView textView = (TextView) itemClicked;
-                 //   String strText = textView.getText().toString(); // получаем текст нажатого элемента
-                  //  if(strText.equalsIgnoreCase(getResources().getString(R.string.name1)))
+                   TextView textView = (TextView) itemClicked;
                     {
-                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        BufferedReader br;
+                        String response = null;
 
-                        fragmentTransaction
-                                .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
-                                .replace(R.id.container, new FragmentFileContent())
-                                .commit();
+                        try {
+
+                            StringBuilder output = new StringBuilder();
+                            String fpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + textView.getText().toString();
+
+                            br = new BufferedReader(new FileReader(fpath));
+                            String line = "";
+                            while ((line = br.readLine()) != null) {
+                                output.append(line +"n");
+                            }
+                            response = output.toString();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + textView.getText().toString(), Toast.LENGTH_LONG).show();
+
+                        tvFileContent.setText(response);
                     }
                 }
             });
@@ -190,7 +209,8 @@ public class FragmentAbout extends Fragment {
             zis.closeEntry();
             zis.close();
         } catch (FileNotFoundException ex) {
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
         }
 
     }
