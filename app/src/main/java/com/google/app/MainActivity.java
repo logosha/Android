@@ -2,9 +2,6 @@ package com.google.app;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -32,8 +29,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     ImageView defaultPhoto;
-    final int REQUEST_CODE_CAMERA = 1;
-    final int REQUEST_CODE_GALLERY = 2;
     final String EDU = "edu";
     final String EXP = "exp";
     final String SKL = "skl";

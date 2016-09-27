@@ -1,18 +1,23 @@
 package com.google.app.fragments;
 
+import android.annotation.TargetApi;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +27,26 @@ import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
 import com.thin.downloadmanager.ThinDownloadManager;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 public class FragmentAbout extends Fragment {
     Button btnCheck;
     Button btnDownload;
+    Button btnRead;
     ProgressBar downloadProgress;
     TextView tvProgress;
+    ListView lvFiles;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
+    private static final String UNZIP_ARCHIVE = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip";
+    private static final int BUFFER_SIZE = 1024;
 
 
     Uri downloadUri = Uri.parse("https://github.com/logosha/android/archive/master.zip");
@@ -40,11 +59,13 @@ public class FragmentAbout extends Fragment {
 
         btnCheck = (Button) v.findViewById(R.id.btnCheck);
         btnDownload = (Button) v.findViewById(R.id.btnDownload);
+        btnRead = (Button) v.findViewById(R.id.btnRead);
         tvProgress = (TextView) v.findViewById(R.id.downloadStatus);
         downloadProgress = (ProgressBar) v.findViewById(R.id.progress_bar);
+        lvFiles = (ListView)v.findViewById(R.id.listView1);
         downloadProgress.setMax(100);
         downloadProgress.setProgress(0);
-        tvProgress.setText("Press \"PROJECT DOWNLOAD\" for download project to SD");
+        tvProgress.setText("Press \"PROJECT DOWNLOAD\" for download");
 
 
         btnCheck.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +85,14 @@ public class FragmentAbout extends Fragment {
                 downloadProject();
             }
         });
+
+        btnRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unZip(UNZIP_ARCHIVE);
+            }
+        });
+
         return v;
 }
 
@@ -94,6 +123,82 @@ public class FragmentAbout extends Fragment {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public void unZip(final String zipFileName){
+        ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> map;
+        byte[] buffer = new byte[BUFFER_SIZE];
+        final String dstDirectory = destinationDirectory(zipFileName);
+        final File dstDir = new File(dstDirectory);
+        if (!dstDir.exists()) {
+            dstDir.mkdir();
+        }
+
+        try {
+            final ZipInputStream zis = new ZipInputStream(
+                    new FileInputStream(zipFileName));
+            ZipEntry ze = zis.getNextEntry();
+            String nextFileName;
+            while (ze != null) {
+                map = new HashMap<>();
+                nextFileName = ze.getName();
+                File nextFile = new File(dstDirectory + File.separator
+                        + nextFileName);
+
+                  if (ze.isDirectory()) {
+                    nextFile.mkdir();
+                } else {
+                    new File(nextFile.getParent()).mkdirs();
+
+                    try (FileOutputStream fos
+                                 = new FileOutputStream(nextFile)) {
+                        int length;
+                        while((length = zis.read(buffer)) > 0) {
+                            fos.write(buffer, 0, length);
+                        }
+                    }
+                }
+                ze = zis.getNextEntry();
+                map.put("File Name", nextFileName);
+                map.put("File Path", nextFile.getAbsolutePath());
+                myArrList.add(map);
+            }
+
+            SimpleAdapter adapter = new SimpleAdapter(getActivity(), myArrList, android.R.layout.simple_list_item_1,
+                    new String[] {"File Name", "File Path"},
+                    new int[] {android.R.id.text1, android.R.id.text2});
+            lvFiles.setAdapter(adapter);
+
+            lvFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
+                                        long id) {
+                //    TextView textView = (TextView) itemClicked;
+                 //   String strText = textView.getText().toString(); // получаем текст нажатого элемента
+                  //  if(strText.equalsIgnoreCase(getResources().getString(R.string.name1)))
+                    {
+                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+                        fragmentTransaction
+                                .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
+                                .replace(R.id.container, new FragmentFileContent())
+                                .commit();
+                    }
+                }
+            });
+
+            zis.closeEntry();
+            zis.close();
+        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
+        }
+
+    }
+
+
+    private String destinationDirectory(final String srcZip) {
+        return srcZip.substring(0, srcZip.lastIndexOf("."));
+    }
 
 
     public boolean isOnline() {
