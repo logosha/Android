@@ -1,7 +1,6 @@
 package com.google.app.fragments;
 
 import android.annotation.TargetApi;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -10,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class FragmentAbout extends Fragment {
+public class FragmentAbout extends Fragment  {
     Button btnCheck;
     Button btnDownload;
     Button btnRead;
@@ -58,7 +58,8 @@ public class FragmentAbout extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) { View v = inflater.inflate(R.layout.fr_about, container, false);
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fr_about, container, false);
 
         btnCheck = (Button) v.findViewById(R.id.btnCheck);
         btnDownload = (Button) v.findViewById(R.id.btnDownload);
@@ -94,12 +95,22 @@ public class FragmentAbout extends Fragment {
         btnRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                unZip(UNZIP_ARCHIVE);
+                new Handler().post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        unZip(UNZIP_ARCHIVE);
+                    }
+
+                });
             }
         });
 
         return v;
-}
+
+
+
+    }
 
     private void downloadProject() {
         ThinDownloadManager downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
@@ -121,7 +132,9 @@ public class FragmentAbout extends Fragment {
 
                                         @Override
                                         public void onProgress(int id, long totalBytes, long downloadedBytes, int progress) {
-                                            downloadProgress.setProgress(progress);
+                                            if(progress/10>downloadProgress.getProgress()/10) {
+                                                downloadProgress.setProgress(progress);
+                                            }
                                        }
                                     });
         downloadManager.add(downloadRequest);
@@ -186,12 +199,12 @@ public class FragmentAbout extends Fragment {
                         try {
 
                             StringBuilder output = new StringBuilder();
-                            String fpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + textView.getText().toString();
+                            String fpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android/" + textView.getText().toString();
 
                             br = new BufferedReader(new FileReader(fpath));
                             String line = "";
                             while ((line = br.readLine()) != null) {
-                                output.append(line +"n");
+                                output.append(line +"\n");
                             }
                             response = output.toString();
 
@@ -199,7 +212,6 @@ public class FragmentAbout extends Fragment {
                             e.printStackTrace();
                         }
                         Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getActivity(), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + textView.getText().toString(), Toast.LENGTH_LONG).show();
 
                         tvFileContent.setText(response);
                     }
@@ -216,6 +228,7 @@ public class FragmentAbout extends Fragment {
     }
 
 
+
     private String destinationDirectory(final String srcZip) {
         return srcZip.substring(0, srcZip.lastIndexOf("."));
     }
@@ -227,5 +240,6 @@ public class FragmentAbout extends Fragment {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
 
 }
