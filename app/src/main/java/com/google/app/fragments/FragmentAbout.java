@@ -2,6 +2,7 @@ package com.google.app.fragments;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -21,7 +22,9 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.app.PhotoChangeActivity;
 import com.google.app.R;
+import com.google.app.SourceContentActivity;
 import com.thin.downloadmanager.DefaultRetryPolicy;
 import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
@@ -53,8 +56,6 @@ public class FragmentAbout extends Fragment  {
 
     Uri downloadUri = Uri.parse("https://github.com/logosha/android/archive/master.zip");
     Uri destinationUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip");
-    TextView tvFileContent;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,7 +68,6 @@ public class FragmentAbout extends Fragment  {
         tvProgress = (TextView) v.findViewById(R.id.downloadStatus);
         downloadProgress = (ProgressBar) v.findViewById(R.id.progress_bar);
         lvFiles = (ListView)v.findViewById(R.id.listView1);
-        tvFileContent = (TextView) v.findViewById(R.id.fileContent);
 
         downloadProgress.setMax(100);
         downloadProgress.setProgress(0);
@@ -88,7 +88,13 @@ public class FragmentAbout extends Fragment  {
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadProject();
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        downloadProject();
+                    }
+
+                });
             }
         });
 
@@ -96,7 +102,6 @@ public class FragmentAbout extends Fragment  {
             @Override
             public void onClick(View v) {
                 new Handler().post(new Runnable() {
-
                     @Override
                     public void run() {
                         unZip(UNZIP_ARCHIVE);
@@ -187,44 +192,25 @@ public class FragmentAbout extends Fragment  {
                     new int[] {android.R.id.text1, android.R.id.text2});
             lvFiles.setAdapter(adapter);
 
+
             lvFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                         long id) {
-                   TextView textView = (TextView) itemClicked;
-                    {
-                        BufferedReader br;
-                        String response = null;
+                    Intent intent = new Intent(getActivity(), SourceContentActivity.class);
+                    TextView textView = (TextView) itemClicked;
+                    String fpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android/" + textView.getText().toString();
+                    intent.putExtra("fpath", fpath);
+                    startActivity(intent);
 
-                        try {
-
-                            StringBuilder output = new StringBuilder();
-                            String fpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android/" + textView.getText().toString();
-
-                            br = new BufferedReader(new FileReader(fpath));
-                            String line = "";
-                            while ((line = br.readLine()) != null) {
-                                output.append(line +"\n");
-                            }
-                            response = output.toString();
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
-
-                        tvFileContent.setText(response);
-                    }
                 }
             });
-
             zis.closeEntry();
             zis.close();
         } catch (FileNotFoundException ex) {
         }
         catch (IOException ex) {
         }
-
     }
 
 
