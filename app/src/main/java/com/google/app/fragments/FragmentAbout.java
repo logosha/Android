@@ -15,14 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.app.PhotoChangeActivity;
 import com.google.app.R;
 import com.google.app.SourceContentActivity;
 import com.thin.downloadmanager.DefaultRetryPolicy;
@@ -30,44 +29,45 @@ import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
 import com.thin.downloadmanager.ThinDownloadManager;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class FragmentAbout extends Fragment  {
     Button btnCheck;
     Button btnDownload;
+    Button btnUnzip;
     Button btnRead;
+
     ProgressBar downloadProgress;
     TextView tvProgress;
     ListView lvFiles;
+
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
-    private static final String UNZIP_ARCHIVE = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip";
     private static final int BUFFER_SIZE = 1024;
+    private static final String UNZIP_ARCHIVE = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip";
+    private static final String DOWNLOAD_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/android/android-master";
+    private static final String DOWNLOAD_URI = "https://github.com/logosha/android/archive/master.zip";
 
 
-    Uri downloadUri = Uri.parse("https://github.com/logosha/android/archive/master.zip");
-    Uri destinationUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip");
+    Uri downloadUri = Uri.parse(DOWNLOAD_URI);
+    Uri destinationUri = Uri.parse(UNZIP_ARCHIVE);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fr_about, container, false);
-
         btnCheck = (Button) v.findViewById(R.id.btnCheck);
         btnDownload = (Button) v.findViewById(R.id.btnDownload);
+        btnUnzip = (Button) v.findViewById(R.id.btnUnzip);
         btnRead = (Button) v.findViewById(R.id.btnRead);
         tvProgress = (TextView) v.findViewById(R.id.downloadStatus);
         downloadProgress = (ProgressBar) v.findViewById(R.id.progress_bar);
-        lvFiles = (ListView)v.findViewById(R.id.listView1);
+        lvFiles = (ListView) v.findViewById(R.id.listView1);
 
         downloadProgress.setMax(100);
         downloadProgress.setProgress(0);
@@ -77,7 +77,7 @@ public class FragmentAbout extends Fragment  {
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( isOnline() ){
+                if (isOnline()) {
                     Toast.makeText(getActivity(), "There is an Internet connection", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
@@ -98,9 +98,11 @@ public class FragmentAbout extends Fragment  {
             }
         });
 
-        btnRead.setOnClickListener(new View.OnClickListener() {
+        btnUnzip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity(), DOWNLOAD_PATH, Toast.LENGTH_LONG).show();
+
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -111,11 +113,50 @@ public class FragmentAbout extends Fragment  {
             }
         });
 
+        btnRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                File f = new File(DOWNLOAD_PATH);
+                final File files[] = f.listFiles();
+
+                ArrayAdapter <File> adapter = new ArrayAdapter <> (getActivity(), android.R.layout.simple_list_item_1, files);
+
+                lvFiles.setAdapter(adapter);
+
+                lvFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
+                                            long id) {
+                        Intent intent = new Intent(getActivity(), SourceContentActivity.class);
+
+                          if (files[position].isDirectory()) {
+                              File f = new File(DOWNLOAD_PATH + "/" + files[position].toString());
+                              final File newFiles[] = f.listFiles();
+                              ArrayAdapter <File> adapter = new ArrayAdapter <> (getActivity(), android.R.layout.simple_list_item_1, newFiles);
+                              lvFiles.setAdapter(adapter);
+                              adapter.notifyDataSetChanged();
+                          }
+
+                        else {
+                              TextView textView = (TextView) itemClicked;
+                              String fpath = textView.getText().toString();
+                              intent.putExtra("fpath", fpath);
+                              startActivity(intent);
+                          }
+                    }
+                });
+            }
+        });
+
+
+
         return v;
 
 
 
     }
+
 
     private void downloadProject() {
         ThinDownloadManager downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
@@ -148,22 +189,18 @@ public class FragmentAbout extends Fragment  {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void unZip(final String zipFileName){
-        ArrayList<HashMap<String, String>> myArrList = new ArrayList<>();
-        HashMap<String, String> map;
         byte[] buffer = new byte[BUFFER_SIZE];
         final String dstDirectory = destinationDirectory(zipFileName);
         final File dstDir = new File(dstDirectory);
         if (!dstDir.exists()) {
             dstDir.mkdir();
         }
-
         try {
             final ZipInputStream zis = new ZipInputStream(
                     new FileInputStream(zipFileName));
             ZipEntry ze = zis.getNextEntry();
             String nextFileName;
             while (ze != null) {
-                map = new HashMap<>();
                 nextFileName = ze.getName();
                 File nextFile = new File(dstDirectory + File.separator
                         + nextFileName);
@@ -182,29 +219,9 @@ public class FragmentAbout extends Fragment  {
                     }
                 }
                 ze = zis.getNextEntry();
-                map.put("File Name", nextFileName);
-                map.put("File Path", nextFile.getAbsolutePath());
-                myArrList.add(map);
+
             }
-
-            SimpleAdapter adapter = new SimpleAdapter(getActivity(), myArrList, android.R.layout.simple_list_item_1,
-                    new String[] {"File Name", "File Path"},
-                    new int[] {android.R.id.text1, android.R.id.text2});
-            lvFiles.setAdapter(adapter);
-
-
-            lvFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                                        long id) {
-                    Intent intent = new Intent(getActivity(), SourceContentActivity.class);
-                    TextView textView = (TextView) itemClicked;
-                    String fpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android/" + textView.getText().toString();
-                    intent.putExtra("fpath", fpath);
-                    startActivity(intent);
-
-                }
-            });
+            tvProgress.setText("Unzipping is complete");
             zis.closeEntry();
             zis.close();
         } catch (FileNotFoundException ex) {
@@ -212,8 +229,6 @@ public class FragmentAbout extends Fragment  {
         catch (IOException ex) {
         }
     }
-
-
 
     private String destinationDirectory(final String srcZip) {
         return srcZip.substring(0, srcZip.lastIndexOf("."));
