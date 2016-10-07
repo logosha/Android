@@ -26,7 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".PhotoChangeActivity" />
-        <activity android:name=".SourceContentActivity"></activity>
+        <activity android:name=".SourceContentActivity" />
+        <activity android:name=".ListFileActivity"></activity>
     </application>
 
 </manifest>

@@ -27,10 +27,7 @@ public class SourceContentActivity extends MyAbstractToolbarActivity  {
         String fpath = getIntent().getStringExtra("fpath");
         tvFileContent = (TextView) findViewById(R.id.textSource);
         ivFileContent = (ImageView) findViewById(R.id.imageSource);
-        if (fpath.endsWith("/")) {
-            Toast toast1 = Toast.makeText(this, "this is directory, please select file", Toast.LENGTH_SHORT);
-            toast1.show();
-        }
+
         if (fpath.endsWith(".png")){
             ivFileContent.setVisibility(View.VISIBLE);
             ivFileContent.setImageDrawable(Drawable.createFromPath(fpath));

@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.app.ListFileActivity;
 import com.google.app.R;
 import com.google.app.SourceContentActivity;
 import com.thin.downloadmanager.DefaultRetryPolicy;
@@ -116,73 +117,40 @@ public class FragmentAbout extends Fragment  {
         btnRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                File f = new File(DOWNLOAD_PATH);
-                final File files[] = f.listFiles();
-
-                ArrayAdapter <File> adapter = new ArrayAdapter <> (getActivity(), android.R.layout.simple_list_item_1, files);
-
-                lvFiles.setAdapter(adapter);
-
-                lvFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                                            long id) {
-                        Intent intent = new Intent(getActivity(), SourceContentActivity.class);
-
-                          if (files[position].isDirectory()) {
-                              File f = new File(DOWNLOAD_PATH + "/" + files[position].toString());
-                              final File newFiles[] = f.listFiles();
-                              ArrayAdapter <File> adapter = new ArrayAdapter <> (getActivity(), android.R.layout.simple_list_item_1, newFiles);
-                              lvFiles.setAdapter(adapter);
-                              adapter.notifyDataSetChanged();
-                          }
-
-                        else {
-                              TextView textView = (TextView) itemClicked;
-                              String fpath = textView.getText().toString();
-                              intent.putExtra("fpath", fpath);
-                              startActivity(intent);
-                          }
-                    }
-                });
+                Intent intent = new Intent(getActivity(), ListFileActivity.class);
+                startActivity(intent);
             }
         });
 
-
-
         return v;
-
-
-
     }
 
 
     private void downloadProject() {
         ThinDownloadManager downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
-                DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
+        DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
                 .addCustomHeader("Auth-Token", "YourTokenApiKey")
                 .setRetryPolicy(new DefaultRetryPolicy())
                 .setDestinationURI(destinationUri)
                 .setPriority(DownloadRequest.Priority.HIGH)
                 .setDownloadListener(new DownloadStatusListener() {
-                                        @Override
-                                        public void onDownloadComplete(int id) {
-                                            tvProgress.setText("Loading is complete");
-                                        }
+                    @Override
+                    public void onDownloadComplete(int id) {
+                        tvProgress.setText("Loading is complete");
+                    }
 
-                                        @Override
-                                        public void onDownloadFailed(int id, int errorCode, String errorMessage) {
-                                            downloadProgress.setProgress(0);
-                                        }
+                    @Override
+                    public void onDownloadFailed(int id, int errorCode, String errorMessage) {
+                        downloadProgress.setProgress(0);
+                    }
 
-                                        @Override
-                                        public void onProgress(int id, long totalBytes, long downloadedBytes, int progress) {
-                                            if(progress/10>downloadProgress.getProgress()/10) {
-                                                downloadProgress.setProgress(progress);
-                                            }
-                                       }
-                                    });
+                    @Override
+                    public void onProgress(int id, long totalBytes, long downloadedBytes, int progress) {
+                        if(progress/10>downloadProgress.getProgress()/10) {
+                            downloadProgress.setProgress(progress);
+                        }
+                    }
+                });
         downloadManager.add(downloadRequest);
 
     }
@@ -205,7 +173,7 @@ public class FragmentAbout extends Fragment  {
                 File nextFile = new File(dstDirectory + File.separator
                         + nextFileName);
 
-                  if (ze.isDirectory()) {
+                if (ze.isDirectory()) {
                     nextFile.mkdir();
                 } else {
                     new File(nextFile.getParent()).mkdirs();
