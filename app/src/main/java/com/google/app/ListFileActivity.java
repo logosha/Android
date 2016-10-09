@@ -3,12 +3,9 @@ package com.google.app;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -21,7 +18,7 @@ public class ListFileActivity extends ListActivity {
     private File mRootNode = null;
     private ArrayList<File> mFiles = new ArrayList<File>();
     private CustomAdapter mAdapter = null;
-    private static final String DOWNLOAD_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/android/android-master";
+    private static final String PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/android/android-master";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +36,7 @@ public class ListFileActivity extends ListActivity {
     }
 
     private void refreshFileList() {
-        if (mRootNode == null) mRootNode = new File(DOWNLOAD_PATH);
+        if (mRootNode == null) mRootNode = new File(PATH);
         if (mCurrentNode == null) mCurrentNode = mRootNode;
         mLastNode = mCurrentNode;
         File[] files = mCurrentNode.listFiles();
@@ -76,8 +73,9 @@ public class ListFileActivity extends ListActivity {
             String fpath = f.toString();
             intent.putExtra("fpath", fpath);
             Toast.makeText(this, "You selected: "+fpath+"!", Toast.LENGTH_LONG).show();
-
             startActivity(intent);
         }
     }
+
+
 }

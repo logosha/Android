@@ -14,8 +14,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -24,7 +22,6 @@ import android.widget.Toast;
 
 import com.google.app.ListFileActivity;
 import com.google.app.R;
-import com.google.app.SourceContentActivity;
 import com.thin.downloadmanager.DefaultRetryPolicy;
 import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
@@ -43,7 +40,6 @@ public class FragmentAbout extends Fragment  {
     Button btnDownload;
     Button btnUnzip;
     Button btnRead;
-
     ProgressBar downloadProgress;
     TextView tvProgress;
     ListView lvFiles;
@@ -94,7 +90,6 @@ public class FragmentAbout extends Fragment  {
                     public void run() {
                         downloadProject();
                     }
-
                 });
             }
         });
@@ -103,7 +98,6 @@ public class FragmentAbout extends Fragment  {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), DOWNLOAD_PATH, Toast.LENGTH_LONG).show();
-
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -127,6 +121,10 @@ public class FragmentAbout extends Fragment  {
 
 
     private void downloadProject() {
+        File f = new File(UNZIP_ARCHIVE);
+        if (f.exists()){
+            f.delete();
+        }
         ThinDownloadManager downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
         DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
                 .addCustomHeader("Auth-Token", "YourTokenApiKey")
@@ -152,7 +150,6 @@ public class FragmentAbout extends Fragment  {
                     }
                 });
         downloadManager.add(downloadRequest);
-
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
