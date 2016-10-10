@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity
     final String HOB = "hob";
     final String ABT = "abt";
 
-
-
+    TextView textViewStart;
 
     FragmentEducation fragmentEducation;
     FragmentExperience fragmentExperience;
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerview = navigationView.getHeaderView(0);
         TextView textView = (TextView) headerview.findViewById(R.id.navHeaderText);
-        final TextView textView1 = (TextView) findViewById(R.id.user_id);
+        textViewStart = (TextView) findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentEducation = new FragmentEducation();
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textView1.setVisibility(View.GONE);
+                textViewStart.setVisibility(View.GONE);
                 String tag = "main";
                 getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
                         .replace(R.id.container, fragmentMain, tag)
@@ -91,12 +89,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-     /*   String tag = "main";
-        getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
-                .replace(R.id.container, fragmentMain, tag)
-                .addToBackStack(tag)
-                .commit();*/
     }
 
     @Override
@@ -146,6 +138,8 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        textViewStart = (TextView) findViewById(R.id.user_id);
+        textViewStart.setVisibility(View.GONE);
         return true;
     }
 

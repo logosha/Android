@@ -22,7 +22,7 @@ public class SourceContentActivity extends MyAbstractToolbarActivity  {
         tvFileContent = (TextView) findViewById(R.id.textSource);
         ivFileContent = (ImageView) findViewById(R.id.imageSource);
 
-        if (fpath.endsWith(".png")){
+        if (fpath.endsWith(".png") | fpath.endsWith(".jpg")){
             ivFileContent.setVisibility(View.VISIBLE);
             ivFileContent.setImageDrawable(Drawable.createFromPath(fpath));
         }
