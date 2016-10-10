@@ -20,7 +20,7 @@ public class FragmentHobbies extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fr_hobbies, container, false);
-        imageView = (ImageView) v.findViewById(R.id.imageView);
+        imageView = (ImageView) v.findViewById(R.id.navHeaderImage);
         animation = AnimationUtils.loadAnimation(getActivity(), R.anim.animation_ball);
 
         imageView.startAnimation(animation);

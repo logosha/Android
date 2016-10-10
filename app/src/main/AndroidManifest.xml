@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
@@ -25,8 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PhotoChangeActivity" />
-        <activity android:name=".SourceContentActivity" />
+        <activity android:name=".PhotoChangeActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".SourceContentActivity"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".ListFileActivity"></activity>
     </application>
 

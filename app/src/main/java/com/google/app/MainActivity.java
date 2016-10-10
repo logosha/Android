@@ -15,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.app.fragments.FragmentAbout;
@@ -61,6 +64,9 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerview = navigationView.getHeaderView(0);
+        TextView textView = (TextView) headerview.findViewById(R.id.navHeaderText);
+        final TextView textView1 = (TextView) findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentEducation = new FragmentEducation();
@@ -70,11 +76,27 @@ public class MainActivity extends AppCompatActivity
         fragmentMain = new FragmentMain();
         fragmentAbout = new FragmentAbout();
 
-        String tag = "main";
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textView1.setVisibility(View.GONE);
+                String tag = "main";
+                getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
+                        .replace(R.id.container, fragmentMain, tag)
+                        .addToBackStack(tag)
+                        .commit();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+
+            }
+        });
+
+     /*   String tag = "main";
         getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
                 .replace(R.id.container, fragmentMain, tag)
                 .addToBackStack(tag)
-                .commit();
+                .commit();*/
     }
 
     @Override
@@ -116,7 +138,7 @@ public class MainActivity extends AppCompatActivity
             fragmentToShow = fragmentAbout;
             tag = ABT;
         }
-                 fragmentTransaction
+        fragmentTransaction
                 .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
                 .replace(R.id.container, fragmentToShow, tag)
                 .addToBackStack(tag)

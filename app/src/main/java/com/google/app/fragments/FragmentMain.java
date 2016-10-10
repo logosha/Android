@@ -23,15 +23,12 @@ import java.io.File;
 
 public class FragmentMain extends Fragment implements View.OnClickListener{
 
-    ImageView settings;
     ImageView defaultPhoto;
-    ImageView logOut;
-    TextView userID;
+
     TextView email;
     TextView name;
     TextView secondName;
     TextView phoneNumber;
-    boolean isEdit = false;
     final int REQUEST_CODE_CAMERA = 1;
     final int REQUEST_CODE_GALLERY = 2;
 
@@ -41,47 +38,29 @@ public class FragmentMain extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.main, container, false);
 
-        settings = (ImageView) v.findViewById(R.id.settings);
         defaultPhoto = (ImageView) v.findViewById(R.id.default_photo);
-        logOut = (ImageView) v.findViewById(R.id.log_out);
-        userID = (TextView) v.findViewById(R.id.user_id);
+
         name = (TextView) v.findViewById(R.id.name);
         email = (TextView) v.findViewById(R.id.email);
         secondName = (TextView) v.findViewById(R.id.second_name);
         phoneNumber = (TextView) v.findViewById(R.id.phone_number);
 
         defaultPhoto.setOnClickListener(this);
-        logOut.setOnClickListener(this);
-        userID.setOnClickListener(this);
+
         name.setOnClickListener(this);
         secondName.setOnClickListener(this);
         phoneNumber.setOnClickListener(this);
         email.setOnClickListener(this);
-        settings.setOnClickListener(this);
-
 
         return v;
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.settings && !isEdit) {
-            Toast toast1 = Toast.makeText(getActivity(), "включен edit mode", Toast.LENGTH_SHORT);
-            toast1.show();
-            isEdit = true;
-        } else if (v.getId() == R.id.settings && isEdit) {
-            Toast toast2 = Toast.makeText(getActivity(), "выключен edit mode", Toast.LENGTH_SHORT);
-            toast2.show();
-            isEdit = false;
-        } else if (v.getId() == R.id.default_photo && isEdit) {
+        if (v.getId() == R.id.default_photo) {
             showChooserDialog();
-        } else if (v.getId() == R.id.default_photo) {
-            Toast.makeText(getActivity(), "это картинка", Toast.LENGTH_LONG).show();
-        } else if (v.getId() == R.id.log_out && isEdit) {
-            Toast.makeText(getActivity(), "это иконка", Toast.LENGTH_LONG).show();
-        } else if (isEdit) {
-            Toast.makeText(getActivity(), ((TextView) v).getText(), Toast.LENGTH_LONG).show();
         }
+
     }
 
     private void showChooserDialog() {
@@ -93,7 +72,6 @@ public class FragmentMain extends Fragment implements View.OnClickListener{
         btn1.setText(R.string.from_gallery);
         Button btn2 = (Button) dialog.findViewById(R.id.from_camera);
         btn2.setText(R.string.from_camera);
-        ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
         dialog.show();
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
