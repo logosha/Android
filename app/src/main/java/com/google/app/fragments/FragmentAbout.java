@@ -15,10 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.app.ListFileActivity;
 import com.google.app.R;
@@ -36,18 +34,14 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class FragmentAbout extends Fragment  {
-    Button btnCheck;
-    Button btnDownload;
-    Button btnUnzip;
+
     Button btnRead;
     ProgressBar downloadProgress;
     TextView tvProgress;
-    ListView lvFiles;
 
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
     private static final int BUFFER_SIZE = 1024;
     private static final String UNZIP_ARCHIVE = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/android.zip";
-    private static final String DOWNLOAD_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/android/android-master";
     private static final String DOWNLOAD_URI = "https://github.com/logosha/android/archive/master.zip";
 
 
@@ -58,55 +52,18 @@ public class FragmentAbout extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fr_about, container, false);
-        btnCheck = (Button) v.findViewById(R.id.btnCheck);
-        btnDownload = (Button) v.findViewById(R.id.btnDownload);
-        btnUnzip = (Button) v.findViewById(R.id.btnUnzip);
+
         btnRead = (Button) v.findViewById(R.id.btnRead);
         tvProgress = (TextView) v.findViewById(R.id.downloadStatus);
         downloadProgress = (ProgressBar) v.findViewById(R.id.progress_bar);
-        lvFiles = (ListView) v.findViewById(R.id.listView1);
-
         downloadProgress.setMax(100);
         downloadProgress.setProgress(0);
-        tvProgress.setText("Press \"PROJECT DOWNLOAD\" for download");
 
-
-        btnCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isOnline()) {
-                    Toast.makeText(getActivity(), "There is an Internet connection", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        btnDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        downloadProject();
-                    }
-                });
-            }
-        });
-
-        btnUnzip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), DOWNLOAD_PATH, Toast.LENGTH_LONG).show();
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        unZip(UNZIP_ARCHIVE);
-                    }
-
-                });
-            }
-        });
+        if (isOnline()){
+            downloadProject();
+         }else{
+            btnRead.setEnabled(false);
+         }
 
         btnRead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +84,6 @@ public class FragmentAbout extends Fragment  {
         }
         ThinDownloadManager downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
         DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
-                .addCustomHeader("Auth-Token", "YourTokenApiKey")
                 .setRetryPolicy(new DefaultRetryPolicy())
                 .setDestinationURI(destinationUri)
                 .setPriority(DownloadRequest.Priority.HIGH)
@@ -135,6 +91,12 @@ public class FragmentAbout extends Fragment  {
                     @Override
                     public void onDownloadComplete(int id) {
                         tvProgress.setText("Loading is complete");
+                        new Handler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                unZip(UNZIP_ARCHIVE);
+                            }
+                        });
                     }
 
                     @Override
@@ -190,6 +152,7 @@ public class FragmentAbout extends Fragment  {
             zis.closeEntry();
             zis.close();
         } catch (FileNotFoundException ex) {
+            btnRead.setEnabled(false);
         }
         catch (IOException ex) {
         }

@@ -43,6 +43,17 @@
     Magister of Physics; Physics Faculty; V. N. Karazin Kharkiv National University; Kharkov, Ukraine.
     </string>
 
+     <string name="about_app">
+         <b>This is an Android Application that reflects my CV, based on the Navigation Drawer pattern. Activities,
+         Fragments and Adapters are used in project. The project must demonstrate my ability to work with both
+         self-code and third-party libraries. Project is oriented to be flexible and easy to add new functionality and features. </b>\n
+         <b>You can:</b>\n
+    1. navigate between pages using the sidebar menu.\n
+    2. upload a photo from the gallery or shoot a photo with a camera.\n
+    3. download source code from githab.\n
+    4. browse the project structure and source code.\n
+    </string>
+
     <string name="univer">Univer</string>
 
     <string-array name="names">

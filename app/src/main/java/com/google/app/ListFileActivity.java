@@ -72,7 +72,7 @@ public class ListFileActivity extends ListActivity {
             Intent intent = new Intent(this, SourceContentActivity.class);
             String fpath = f.toString();
             intent.putExtra("fpath", fpath);
-            Toast.makeText(this, "You selected: "+fpath+"!", Toast.LENGTH_LONG).show();
+          //  Toast.makeText(this, "You selected: "+fpath+"!", Toast.LENGTH_LONG).show();
             startActivity(intent);
         }
     }

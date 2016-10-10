@@ -16,15 +16,11 @@
             android:title="Hobbies" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Description">
         <menu>
             <item
                 android:id="@+id/about"
                 android:title="About App" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
         </menu>
     </item>
 
