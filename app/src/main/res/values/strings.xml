@@ -4,7 +4,7 @@
     <string name="second_name">Logosha</string>
     <string name="phone_number">+38 (050) 400-88-40</string>
     <string name="email">logosha@gmail.com</string>
-    <string name="from_gallery">Load photo from gallery</string>
+    <string name="from_gallery">From gallery</string>
     <string name="from_camera">Shoot photo</string>
     <string name="tag_image_path" />
 

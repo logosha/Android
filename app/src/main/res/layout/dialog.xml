@@ -26,9 +26,9 @@
 
     <Button
         android:id="@+id/from_galery"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="@string/from_gallery"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
@@ -36,9 +36,9 @@
 
     <Button
         android:id="@+id/from_camera"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="@string/from_camera"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"

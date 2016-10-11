@@ -3,9 +3,7 @@ package com.google.app;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,9 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.app.fragments.FragmentAbout;
@@ -37,8 +33,12 @@ public class MainActivity extends AppCompatActivity
     final String SKL = "skl";
     final String HOB = "hob";
     final String ABT = "abt";
+    final String MAIN = "main";
 
     TextView textViewStart;
+    TextView textView;
+    ImageView imageView;
+    View headerView;
 
     FragmentEducation fragmentEducation;
     FragmentExperience fragmentExperience;
@@ -62,8 +62,9 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerview = navigationView.getHeaderView(0);
-        TextView textView = (TextView) headerview.findViewById(R.id.navHeaderText);
+        headerView = navigationView.getHeaderView(0);
+        textView = (TextView) headerView.findViewById(R.id.navHeaderText);
+        imageView = (ImageView) headerView.findViewById(R.id.navHeaderImage);
         textViewStart = (TextView) findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -75,14 +76,17 @@ public class MainActivity extends AppCompatActivity
         fragmentAbout = new FragmentAbout();
 
 
-        textView.setOnClickListener(new View.OnClickListener() {
+        openHomeFragment();
+
+    }
+
+    public void openHomeFragment(){
+        headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textViewStart.setVisibility(View.GONE);
-                String tag = "main";
                 getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
-                        .replace(R.id.container, fragmentMain, tag)
-                        .addToBackStack(tag)
+                        .replace(R.id.container, fragmentMain, MAIN)
+                        .addToBackStack(MAIN)
                         .commit();
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
