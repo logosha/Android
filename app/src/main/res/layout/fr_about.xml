@@ -23,6 +23,7 @@
         android:textSize="15dp"
         android:layout_height="wrap_content"
         android:id="@+id/downloadStatus"
+        android:text="Loading..."
         android:layout_gravity="center_horizontal"/>
 
         <ProgressBar

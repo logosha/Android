@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity
     final String ABT = "abt";
     final String MAIN = "main";
 
-    TextView textViewStart;
     TextView textView;
     ImageView imageView;
     View headerView;
@@ -65,7 +64,6 @@ public class MainActivity extends AppCompatActivity
         headerView = navigationView.getHeaderView(0);
         textView = (TextView) headerView.findViewById(R.id.navHeaderText);
         imageView = (ImageView) headerView.findViewById(R.id.navHeaderImage);
-        textViewStart = (TextView) findViewById(R.id.user_id);
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentEducation = new FragmentEducation();
@@ -76,23 +74,23 @@ public class MainActivity extends AppCompatActivity
         fragmentAbout = new FragmentAbout();
 
 
-        openHomeFragment();
-
-    }
-
-    public void openHomeFragment(){
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
-                        .replace(R.id.container, fragmentMain, MAIN)
-                        .addToBackStack(MAIN)
-                        .commit();
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-
+                openHomeFragment();
             }
         });
+
+        openHomeFragment();
+    }
+
+    public void openHomeFragment() {
+        getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_left, R.animator.slide_out_right)
+                .replace(R.id.container, fragmentMain, MAIN)
+                .addToBackStack(MAIN)
+                .commit();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
     }
 
     @Override
@@ -142,8 +140,6 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        textViewStart = (TextView) findViewById(R.id.user_id);
-        textViewStart.setVisibility(View.GONE);
         return true;
     }
 
