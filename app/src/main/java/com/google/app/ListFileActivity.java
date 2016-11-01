@@ -6,7 +6,8 @@ import android.os.Environment;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.google.app.adapters.CustomAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,10 +73,7 @@ public class ListFileActivity extends ListActivity {
             Intent intent = new Intent(this, SourceContentActivity.class);
             String fpath = f.toString();
             intent.putExtra("fpath", fpath);
-          //  Toast.makeText(this, "You selected: "+fpath+"!", Toast.LENGTH_LONG).show();
             startActivity(intent);
         }
     }
-
-
 }

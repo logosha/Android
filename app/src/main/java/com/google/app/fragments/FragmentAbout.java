@@ -61,9 +61,9 @@ public class FragmentAbout extends Fragment  {
 
         if (isOnline()){
             downloadProject();
-         }else{
+        }else{
             btnRead.setEnabled(false);
-         }
+        }
 
         btnRead.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -23,7 +23,7 @@
         android:id="@+id/user_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I'm looking for Junior Java Developer position. To contribute my skills to achieving your company's goals."
+        android:text="I'm looking for Junior Android Developer position. To contribute my skills to achieving your company's goals."
         android:textColor="@color/colorText"
         android:textSize="20dp"
         android:layout_below="@+id/default_photo"

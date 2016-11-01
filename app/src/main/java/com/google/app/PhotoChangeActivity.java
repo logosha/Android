@@ -10,6 +10,9 @@ import android.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
+import com.google.app.adapters.MyCursorAdapter;
+
 /**
  * Created by Алексей on 06.09.2016.
  */

@@ -1,4 +1,4 @@
-package com.google.app;
+package com.google.app.adapters;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.app.R;
 
 /**
  * Created by Алексей on 06.10.2016.

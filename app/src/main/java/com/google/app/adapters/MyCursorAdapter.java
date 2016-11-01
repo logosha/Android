@@ -1,4 +1,4 @@
-package com.google.app;
+package com.google.app.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import com.google.app.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
